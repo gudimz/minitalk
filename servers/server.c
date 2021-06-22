@@ -6,7 +6,7 @@
 /*   By: agigi <agigi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 17:43:43 by agigi             #+#    #+#             */
-/*   Updated: 2021/06/22 02:27:06 by agigi            ###   ########.fr       */
+/*   Updated: 2021/06/22 12:50:17 by agigi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,22 @@ void ft_error_message(char *message)
 
 void ft_get_char(int bit)
 {
-	
+	char c;
+	int i;
+
+	c = 0;
+	i = 0;
+	while (i < 8)
+	{
+		c = 1 + (bit << i);
+		i++;
+	}
+	ft_putchar_fd(c, 1);
 }
 
 void ft_sighandler(int signum)
 {
-	if (signum == 30)
-		ft_get_char(0);
-	else if (signum == 31)
+	if (signum == 31)
 		ft_get_char(1);
 }
 
