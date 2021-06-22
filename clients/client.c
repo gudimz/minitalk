@@ -6,7 +6,7 @@
 /*   By: agigi <agigi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/22 00:30:53 by agigi             #+#    #+#             */
-/*   Updated: 2021/06/22 20:41:45 by agigi            ###   ########.fr       */
+/*   Updated: 2021/06/23 02:31:34 by agigi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,19 @@ int	ft_send_message(char c, pid_t pid)
 	return (1);
 }
 
+void	ft_sighandler(int signum)
+{
+	if (signum == 31)
+		ft_putendl_fd("\033[1;32mmessage delivered to the server!\033[0m", 1);
+}
+
 int	main(int argc, char **argv)
 {
 	int		i;
 	pid_t	pid;
 
 	i = 0;
+	signal(SIGUSR2, ft_sighandler);
 	if (argc != 3)
 		ft_error_message("Error: wrong number of arguments");
 	if (!ft_check_pid(argv[1]))
@@ -76,4 +83,5 @@ int	main(int argc, char **argv)
 	}
 	if (!ft_send_message('\n', pid))
 		ft_error_message("Error: sending signal");
+	return (0);
 }

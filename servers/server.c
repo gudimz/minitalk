@@ -6,7 +6,7 @@
 /*   By: agigi <agigi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 17:43:43 by agigi             #+#    #+#             */
-/*   Updated: 2021/06/22 20:39:25 by agigi            ###   ########.fr       */
+/*   Updated: 2021/06/23 02:22:19 by agigi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,27 @@ void	ft_error_message(char *message)
 	exit(1);
 }
 
-void	ft_sighandler(int signum)
+void ft_sighandler(int signum, siginfo_t *info, void *context)
 {
 	static char	c = 0;
 	static int	i = 0;
 
+	(void)context;
+	(void)info;
+	// ft_putstr_fd("\033[1;32mPID: \033[0m", 1);
+	// ft_putnbr_fd((int)info->si_pid, 1);
+	// ft_putstr_fd("\033[1;32m send new message! \033[0m", 1);
 	if (signum == 31)
 		c = c + (1 << i);
 	i++;
 	if (i == 8)
 	{
 		ft_putchar_fd(c, 1);
+		if (c == '\n')
+		{
+			if (kill(info->si_pid, SIGUSR2) == -1)
+				ft_error_message("Error: sending signal");
+		}
 		c = 0;
 		i = 0;
 	}
@@ -37,6 +47,7 @@ void	ft_sighandler(int signum)
 int	main(int argc, char **argv)
 {
 	pid_t	pid;
+	struct sigaction	act;
 
 	(void)argv;
 	if (argc != 1)
@@ -45,10 +56,11 @@ int	main(int argc, char **argv)
 	ft_putstr_fd("\033[1;32mServer started!\nPID: \033[0m", 1);
 	ft_putnbr_fd(pid, 1);
 	ft_putchar_fd('\n', 1);
-	signal(SIGUSR1, ft_sighandler);
-	signal(SIGUSR2, ft_sighandler);
+	act.sa_flags = SA_SIGINFO;
+	act.sa_sigaction = ft_sighandler;
+	sigaction(SIGUSR1, &act, NULL);
+	sigaction(SIGUSR2, &act, NULL);
 	while (21)
 		pause();
-	ft_putchar_fd('\n', 1);
 	return (0);
 }
