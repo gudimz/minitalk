@@ -6,42 +6,37 @@
 /*   By: agigi <agigi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 17:43:43 by agigi             #+#    #+#             */
-/*   Updated: 2021/06/22 12:50:17 by agigi            ###   ########.fr       */
+/*   Updated: 2021/06/22 20:39:25 by agigi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void ft_error_message(char *message)
+void	ft_error_message(char *message)
 {
-	ft_putendl_fd(message , 2);
+	ft_putendl_fd(message, 2);
 	exit(1);
 }
 
-void ft_get_char(int bit)
+void	ft_sighandler(int signum)
 {
-	char c;
-	int i;
+	static char	c = 0;
+	static int	i = 0;
 
-	c = 0;
-	i = 0;
-	while (i < 8)
-	{
-		c = 1 + (bit << i);
-		i++;
-	}
-	ft_putchar_fd(c, 1);
-}
-
-void ft_sighandler(int signum)
-{
 	if (signum == 31)
-		ft_get_char(1);
+		c = c + (1 << i);
+	i++;
+	if (i == 8)
+	{
+		ft_putchar_fd(c, 1);
+		c = 0;
+		i = 0;
+	}
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	(void)argv;
 	if (argc != 1)
@@ -54,5 +49,6 @@ int main(int argc, char **argv)
 	signal(SIGUSR2, ft_sighandler);
 	while (21)
 		pause();
+	ft_putchar_fd('\n', 1);
 	return (0);
 }
