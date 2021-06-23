@@ -6,7 +6,7 @@
 /*   By: agigi <agigi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/29 00:33:44 by agigi             #+#    #+#             */
-/*   Updated: 2021/06/22 16:33:47 by agigi            ###   ########.fr       */
+/*   Updated: 2021/06/23 16:53:02 by agigi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,7 @@
 # include "libft.h"
 # include <unistd.h>
 # include <signal.h>
+
+int	g_flag;
 
 #endif

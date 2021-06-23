@@ -6,7 +6,7 @@
 /*   By: agigi <agigi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 17:43:43 by agigi             #+#    #+#             */
-/*   Updated: 2021/06/23 13:01:51 by agigi            ###   ########.fr       */
+/*   Updated: 2021/06/23 17:21:34 by agigi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	ft_sighandler(int signum, siginfo_t *info, void *context)
 	static int	i = 0;
 
 	(void)context;
-	(void)info;
 	if (signum == 31)
 		c = c + (1 << i);
 	i++;
@@ -32,7 +31,11 @@ void	ft_sighandler(int signum, siginfo_t *info, void *context)
 	{
 		ft_putchar_fd(c, 1);
 		if (c == '\0')
+		{
 			ft_putchar_fd('\n', 1);
+			if (kill(info->si_pid, SIGUSR1) == -1)
+				ft_error_message("Error: sending signal");
+		}
 		c = 0;
 		i = 0;
 	}

@@ -6,7 +6,7 @@
 /*   By: agigi <agigi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/22 00:30:53 by agigi             #+#    #+#             */
-/*   Updated: 2021/06/23 13:05:48 by agigi            ###   ########.fr       */
+/*   Updated: 2021/06/23 17:03:25 by agigi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	ft_send_message(char c, pid_t pid)
 	int	i;
 
 	i = 0;
+	g_flag = 0;
 	while (i < 8)
 	{
 		bit = (c >> i) & 1;
@@ -57,24 +58,35 @@ int	ft_send_message(char c, pid_t pid)
 	return (1);
 }
 
+void	ft_sighandler(int signum)
+{
+	(void)signum;
+	g_flag = 1;
+}
+
 int	main(int argc, char **argv)
 {
 	int		i;
 	pid_t	pid;
 
 	i = 0;
+	g_flag = 1;
 	if (argc != 3)
 		ft_error_message("Error: wrong number of arguments");
 	if (!ft_check_pid(argv[1]))
 		ft_error_message("Error: invalid PID number");
+	signal(SIGUSR1, ft_sighandler);
 	pid = (pid_t)ft_atoi(argv[1]);
-	while (argv[2][i])
+	if (g_flag == 1)
 	{
-		if (!ft_send_message(argv[2][i], pid))
+		while (argv[2][i])
+		{
+			if (!ft_send_message(argv[2][i], pid))
+				ft_error_message("Error: sending signal");
+			i++;
+		}
+		if (!ft_send_message('\0', pid))
 			ft_error_message("Error: sending signal");
-		i++;
 	}
-	if (!ft_send_message('\0', pid))
-		ft_error_message("Error: sending signal");
 	return (0);
 }
