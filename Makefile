@@ -3,8 +3,8 @@
 SERV_NAME = server
 CLIENT_NAME = client
 
-B_SERV_NAME = server
-B_CLIENT_NAME = client
+B_SERV_NAME = server_bonus
+B_CLIENT_NAME = client_bonus
 
 LIBFTDIR = ./libft/
 LIBFT = $(LIBFTDIR)libft.a
@@ -59,7 +59,7 @@ tools:
 norme: fclean
 		norminette ./servers/* ./clients/* ./bonus/servers/* ./bonus/clients/*
 		make -C $(LIBFTDIR) norme
-bonus: fclean $(B_SERV_OBJS) $(B_CLIENT_OBJS) | tools
+bonus: $(B_SERV_NAME) $(B_CLIENT_NAME)
 
 $(B_SERV_NAME): $(B_SERV_OBJS) | tools
 		$(CC) $(B_CFLAGS) $(LIBFT) $(B_SERV_OBJS) -o $(B_SERV_NAME)
@@ -74,7 +74,7 @@ clean:
 		rm -f $(B_SERV_OBJS) $(B_SERV_D_FILES) $(B_CLIENT_OBJS) $(B_CLIENT_D_FILES)
 		make -C $(LIBFTDIR) clean
 fclean: clean
-		rm -f ${SERV_NAME} $(CLIENT_NAME)
+		rm -f ${SERV_NAME} $(CLIENT_NAME) $(B_CLIENT_NAME) $(B_SERV_NAME)
 		make -C $(LIBFTDIR) fclean
 
 re: fclean all
