@@ -24,9 +24,9 @@ You must create a communication program in the form of a client and a server.
 ***
 `$ ./server`
 
-`Server started!`
+Server started!
 
-`PID: PID_SERVER`
+PID: PID_SERVER
 ***
 `$ ./client <PID_SERVER> <TEXT>`
 
