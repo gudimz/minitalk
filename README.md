@@ -23,7 +23,9 @@ You must create a communication program in the form of a client and a server.
 `make`
 ***
 `$ ./server`
+
 `Server started!`
+
 `PID: PID_SERVER`
 ***
 `$ ./client <PID_SERVER> <TEXT>`
